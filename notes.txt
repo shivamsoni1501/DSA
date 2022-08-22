@@ -1,0 +1,54 @@
+===============================
+DP
+===============================
+--------------------------------------------------------
+1. Knapsack 0-1
+    '''
+    Given a bag(Knapsack) with some capacity W and some set of items with
+    some weights and values.
+    Now we need to pick items such a way that total item weights does'nt
+    exeeds the capacity W and gives the maximum possible values
+    '''
+    Input : 
+        Arr = List of weight and values ( [ weight, value ] )
+    state : 
+        find(index, weight)
+    Inicialization :
+        create the dp array of (N+1)x(W+1) with 0
+
+    recurrence relation :   dp[index][weight] = max( dp[index-1][weight], dp[index-1][weight-Arr[index-1][0]] + A[index-1][1] )
+
+--------------------------------------------------------
+
+===============================
+String
+===============================
+--------------------------------------------------------
+1. Longest Substring with no reapting charactors
+    Input:
+        s = String() => "acvaeeh"
+    IDEA:
+        take two pointers one for starting and one for ending
+        update the ending pointer at each iteration.
+        upadate the starting vertex with any charactor's latest occuraction.
+            -> left = max(left, Dic[s[i]]+1 )   if s[i] in Dic
+        update the maxL
+    CODE:
+        def lengthOfLongestSubstring(self, s: str) -> int:
+            N = len(s)
+            if N<=1:
+                return N
+            D = dict()
+            i = 0
+            left = 0
+            maxL = 0
+            while i < N:
+                if s[i] in D:
+                    left = max(left, D[s[i]]+1)
+                D[s[i]] = i
+                
+                maxL = max(maxL, i-left+1)
+                i += 1
+            return maxL
+--------------------------------------------------------
+
