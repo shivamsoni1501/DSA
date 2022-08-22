@@ -11,13 +11,92 @@ DP
     '''
     Input : 
         Arr = List of weight and values ( [ weight, value ] )
-    state : 
+    State : 
         find(index, weight)
+    Recurrence Relation :   
+        dp[index][weight] = max( dp[index-1][weight], dp[index-1][weight-Arr[index-1][0]] + A[index-1][1] )
     Inicialization :
         create the dp array of (N+1)x(W+1) with 0
+    CODE:
+        #define loop(i, a, b) for(int i = a; i<b; ++i)
+        bool canPartition(vector<int>& nums) {
+            int n = nums.size();
+            int sum = 0; 
+            for(auto x: nums) sum += x;
+            
+            if(sum&1) return false;
+            sum /= 2;
+            
+            int dp[n+1][sum+1];
+            loop(i,0,n+1){
+                loop(j,0,sum+1){
+                    dp[i][j] = false;
+                }
+            }
+            loop(i,0,n+1) dp[i][0] = true;
+            
+            loop(i, 1, n+1){
+                loop(j, 1, sum+1){
+                    if (j >= nums[i-1] ) dp[i][j] = dp[i-1][j-nums[i-1]] or dp[i-1][j];
+                    else dp[i][j] = dp[i-1][j];
+                }
+            }
+            return dp[n][sum];        
+        }
+--------------------------------------------------------
+2. Knapsack 0-1 Unbounded:
+    CODE:
+        #define loop(i, a, b) for(int i = a; i<b; ++i)
+        #define INT_MAX 1<<31 - 1
+        int coinChange(vector<int>& coins, int amount) {
+            int n = coins.size();
+            
+            int dp[n+1][amount+1];
+            loop(i,0,n+1){
+                loop(j,0,amount+1){
+                    dp[i][j] = INT_MAX;
+                }
+            }
+            loop(i,0,n+1) dp[i][0] = 0;
 
-    recurrence relation :   dp[index][weight] = max( dp[index-1][weight], dp[index-1][weight-Arr[index-1][0]] + A[index-1][1] )
+            loop(i, 1, n+1){
+                loop(j, 1, amount+1){
+                    if (j >= coins[i-1] ) dp[i][j] = min(dp[i][j-coins[i-1]]+1 , dp[i-1][j]);
+                    else dp[i][j] = dp[i-1][j];
+                }
+            }
+            return (dp[n][amount] != INT_MAX ? dp[n][amount] : -1);
 
+        }
+--------------------------------------------------------
+3. Longest Common Subsequence(LCS):
+    '''
+    Given two strings S1 and S2, return the length of their 
+    longest common subsequence. If there is no common subsequence, 
+    return 0.    
+    '''
+    Input:
+        S1 = String
+        S2 = String
+    State:
+        find_subsequence(i1, i2)
+    Recurrence Relation:
+        dp[i][j] = max( dp[i-1][j-1]+1 if S1[i]==S2[j], dp[i-1][j], dp[i][j-1] )
+    Inicialization:
+        dp[i][j] = 0
+    CODE:
+        N1 = len(S1)
+        N2 = len(S2)
+        
+        dp = [ [0]*(N2+1) for _ in range(N1+1) ]
+        
+        for i in range(1, N1+1):
+            for j in range(1, N2+1):
+                dp[i][j] = max(dp[i][j-1], dp[i-1][j])
+                if S1[i-1] == S2[j-1]:
+                    dp[i][j] = max(dp[i-1][j-1]+1, dp[i][j])
+        
+        return dp[N1][N2]
 --------------------------------------------------------
 
 ===============================
