@@ -98,6 +98,50 @@ DP
         
         return dp[N1][N2]
 --------------------------------------------------------
+3. Matrix Chain Multiplication(MCM):
+    '''
+    Given a sequence of matrices, find the most efficient way to 
+    multiply these matrices together. The efficient way is the
+    one that involves the least number of multiplications.
+    EX => [20, 10, 30, 40]
+    SOLVE => 
+        # (20, 10) * (10, 30, 40)
+            = (0)+10*30*40+20*10*40 = 20000
+        # (20, 10, 30) * (30, 40)
+            = (20*10*30)+20*30*40+0 = 30000
+    '''
+    Input:
+        M = array<int> [20, 10, 30, 40, 10]
+    State:
+        find_min_cost(i, j)
+    Recurrence Relation:
+        dp[i][j] = min(  dp[i][k] + dp[k][j] + M[i]*M[k]*M[j]  for k in range(i+1, j) )
+    Inicialization:
+        dp[i][j] = -1
+    CODE:
+        def matrixMultiplication(self, M):
+            # code here
+            N = len(M)
+            dp = [ [-1]*N for _ in range(N) ]
+
+            def rec(i, j):
+                if i + 1 >= j:
+                    return 0
+                
+                if dp[i][j] != -1:
+                    return dp[i][j]
+                
+                ans = 1<<31
+                for k in range(i+1, j):
+                    temp = rec(i, k) + rec(k, j) + M[k]*M[i]*M[j]
+                    ans = min(ans, temp)
+                dp[i][j] = ans            
+                return ans
+        
+            return rec(0, N-1)
+
+
+--------------------------------------------------------
 
 ===============================
 String
