@@ -41,7 +41,7 @@ def LCA_Q(x: int, y: int):
     d = l[y]-l[x]
     if d!=0:
         for i in range(MAX2-1,-1, -1):
-            if d>=1<<i:
+            if d&(1<<i):
                 d -= 1<<i
                 y = pp[y][i]
     if x == y:

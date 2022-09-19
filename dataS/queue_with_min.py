@@ -18,7 +18,7 @@ class MinQueue:
     
     def min(self):
         return self.q[0][0] if len(self.q)!=0 else -float('inf')
-        
+
 q = MinQueue()
 
 arr = [10, 2,4,12,12,123,41,24,1,24,1]
